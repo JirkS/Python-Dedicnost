@@ -1,4 +1,4 @@
-# regex pro barvu HEX  a pro A-K a pro expiraci
+# hlidat regexem pro barvu HEX  a pro A-K a pro expiraci
 
 class IkeaItem:
     def __init__(self, n_sh: float, n_st: str, n: str, p: float):
@@ -48,7 +48,7 @@ class IkeaItem:
         self._price = x
 
     def __str__(self):
-        return "IkeaItem: number of shelf: " + str(self._num_shelf) + ", number of street: " + self._num_street + ", name: " + self._name + ", price: " + str(self._price)
+        return "IkeaItem: number of shelf: {}, number of street: {}, name: {}, price: {}".format(self._num_shelf, self._num_street, self._name, self._price)
 
 
 class MeasureableIkeaItem:
@@ -87,6 +87,9 @@ class MeasureableIkeaItem:
             raise Exception("Delka musi byt kladna!")
         self._length = x
 
+    def __str__(self):
+        return ", measureableIkeaItem: height: {}, width: {}, length: {}".format(self._height, self._width, self._length)
+
 
 class PlasticWasteIkeaItem:
     def __init__(self, w_o_p: float):
@@ -103,7 +106,7 @@ class PlasticWasteIkeaItem:
         self._weight_of_plastic = x
 
     def __str__(self):
-        return "PlasticWasteIkeaItem: " + str(self._weight_of_plastic)
+        return ", plasticWasteIkeaItem: weight_of_plastic: {}".format(self._weight_of_plastic)
 
 
 class LACK(IkeaItem, MeasureableIkeaItem):
@@ -122,6 +125,9 @@ class LACK(IkeaItem, MeasureableIkeaItem):
             raise Exception("Barva musi obsahovat presne 6 znaku v hex tvaru!")
         self._hex_color = x
 
+    def __str__(self):
+        return "LACK: hex_color: {}".format(self._hex_color) + IkeaItem.__str__(self) + MeasureableIkeaItem.__str__(self)
+
 
 class SAMLA_BOX(IkeaItem, MeasureableIkeaItem, PlasticWasteIkeaItem):
     def __init__(self, v: float, n_sh: float, n_st: str, n: str, p: float, h: float, w: float, l: float, w_o_p: float):
@@ -139,6 +145,9 @@ class SAMLA_BOX(IkeaItem, MeasureableIkeaItem, PlasticWasteIkeaItem):
         if x < 0:
             raise Exception("Objem musi byt kladny!")
         self._volume = x
+
+    def __str__(self):
+        return "SAMLA_BOX: volume: {}".format(self._volume) + IkeaItem.__str__(self) + MeasureableIkeaItem.__str__(self) + PlasticWasteIkeaItem.__str__(self)
 
 
 class SJORAPPORT(IkeaItem, PlasticWasteIkeaItem):
@@ -169,14 +178,16 @@ class SJORAPPORT(IkeaItem, PlasticWasteIkeaItem):
         self._weight = x
 
     def __str__(self):
-        return "SJORAPPORT: expiration: {}, weight: {}, ".format(self._expiration, self._weight)
+        return "SJORAPPORT: expiration: {}, weight: {}, ".format(self._expiration, self._weight) + IkeaItem.__str__(self) + PlasticWasteIkeaItem.__str__(self)
 
 
 try:
-    s_m = SAMLA_BOX(12, 5, 9, "neco1", 1200, 12, 5, 6, 485)
-    l = LACK("000000", 41, 5, "neco2", 500, 87, 56, 7)
-    s = SJORAPPORT("2023-09-04", 85, 65, 85, "neco3", 899, 52)
+    s_m = SAMLA_BOX(12, 5, "K", "neco1", 1200, 12, 5, 6, 485)
+    l = LACK("000000", 41, "A", "neco2", 500, 87, 56, 7)
+    s = SJORAPPORT("2023-09-04", 85, 65, "C", "neco3", 899, 52)
 
+    print(s_m)
+    print(l)
     print(s)
 except Exception as e:
     print(e)
